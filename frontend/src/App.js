@@ -19,6 +19,7 @@ import {
 import HomeScreen from './Screens/HomeScreen';
 import SidebarContent from './Components/Dashboard Components/SidebarContent';
 import ProductsScreen from './Screens/ProductsScreen';
+import EmployeeListScreen from './Screens/EmployeeListScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/products" element={<ProductsScreen />} />
+          <Route path="/employees" element={<EmployeeListScreen />} />
         </Routes>
       </main>
     </BrowserRouter>

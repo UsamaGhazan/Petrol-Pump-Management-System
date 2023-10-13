@@ -10,6 +10,9 @@ const theme = extendTheme({
       50: '#ff9e24',
       60: '#000066',
     },
+    customColorScheme: {
+      100: '#6ea7dc',
+    },
   },
   fonts: {
     lato: `'Lato', sans-serif`,
