@@ -22,13 +22,23 @@ import { AiOutlineUser } from 'react-icons/ai';
 
 import NavItem from './NavItem';
 import { useNavigate } from 'react-router-dom';
-import { FaHome, FaShoppingCart, FaUsers } from 'react-icons/fa';
+import {
+  FaDollarSign,
+  FaGasPump,
+  FaHome,
+  FaShoppingCart,
+  FaUserPlus,
+  FaUsers,
+} from 'react-icons/fa';
 import Breadcrumb from './BreadCrumb';
 
 const LinkItems = [
   { name: 'Dashboard', icon: FaHome, to: '/' },
   { name: 'Products', icon: FaShoppingCart, to: '/products' },
   { name: 'Employees List', icon: FaUsers, to: '/employees' },
+  { name: 'Add Employee', icon: FaUserPlus, to: '/addEmployee' },
+  { name: 'Petroleum Products', icon: FaGasPump, to: '/addEmployee' },
+  { name: 'Set Product Prices', icon: FaDollarSign, to: '/addEmployee' },
 ];
 
 const SidebarContent = () => {
@@ -105,6 +115,15 @@ const SidebarContent = () => {
                 {link.name}
               </NavItem>
             ))}
+          </Box>
+          <Box>
+            <Image
+              src={require('../../assets/images/SidebarHelpImage.png')}
+              alt="logo"
+              width="100px"
+              mt={'180px'}
+              ml={'75px'}
+            />
           </Box>
         </Box>
       </Box>
