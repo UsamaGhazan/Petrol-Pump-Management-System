@@ -185,9 +185,13 @@ const ProductsScreen = () => {
                           size={'sm'}
                           width={item.name.length * 8 + 'px'} // Adjust the width based on content
                           value={item.name}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
                         />
                       ) : (
-                        <div>{item.name}</div>
+                        <div width={item.name.length * 8 + 'px'}>
+                          {item.name}
+                        </div>
                       )}
                     </Td>
 
@@ -200,7 +204,9 @@ const ProductsScreen = () => {
                           value={item.previousStock}
                         />
                       ) : (
-                        <div>{item.previousStock}</div>
+                        <div width={item.name.length * 8 + 'px'}>
+                          {item.previousStock}
+                        </div>
                       )}
                     </Td>
                     <Td>
@@ -212,7 +218,9 @@ const ProductsScreen = () => {
                           value={item.newStock}
                         />
                       ) : (
-                        <div>{item.newStock}</div>
+                        <div width={item.name.length * 8 + 'px'}>
+                          {item.newStock}
+                        </div>
                       )}
                     </Td>
                     <Td>{item.previousStock + item.newStock}</Td>
@@ -225,7 +233,9 @@ const ProductsScreen = () => {
                           value={item.sale}
                         />
                       ) : (
-                        <div>{item.sale}</div>
+                        <div width={item.name.length * 8 + 'px'}>
+                          {item.sale}
+                        </div>
                       )}
                     </Td>
                     <Td>
@@ -237,7 +247,9 @@ const ProductsScreen = () => {
                           value={item.remainingBalance}
                         />
                       ) : (
-                        <div>Rs. {item.remainingBalance}</div>
+                        <div width={item.name.length * 8 + 'px'}>
+                          Rs. {item.remainingBalance}
+                        </div>
                       )}
                     </Td>
                     <Td>

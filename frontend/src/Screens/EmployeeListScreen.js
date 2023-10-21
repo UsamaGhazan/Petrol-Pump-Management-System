@@ -66,6 +66,7 @@ const employees = [
     role: 'Manager',
   },
   {
+    isAdmin: true,
     name: 'Olivia Wilson',
     email: 'olivia@gmail.com',
     employed: '27/05/2022',
