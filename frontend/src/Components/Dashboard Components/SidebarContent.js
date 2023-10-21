@@ -36,9 +36,9 @@ const LinkItems = [
   { name: 'Dashboard', icon: FaHome, to: '/' },
   { name: 'Products', icon: FaShoppingCart, to: '/products' },
   { name: 'Employees List', icon: FaUsers, to: '/employees' },
-  { name: 'Add Employee', icon: FaUserPlus, to: '/addEmployee' },
-  { name: 'Petroleum Products', icon: FaGasPump, to: '/addEmployee' },
-  { name: 'Set Product Prices', icon: FaDollarSign, to: '/addEmployee' },
+  { name: 'Add New Employee', icon: FaUserPlus, to: '/addEmployee' },
+  { name: 'Petroleum Products', icon: FaGasPump, to: '/petroleumProducts' },
+  { name: 'Set Product Prices', icon: FaDollarSign, to: '/setPrices' },
 ];
 
 const SidebarContent = () => {
