@@ -10,6 +10,8 @@ import {
   Menu,
   MenuButton,
   HStack,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import {
   FiSettings,
@@ -19,9 +21,9 @@ import {
   FiMessageSquare,
 } from 'react-icons/fi';
 import { AiOutlineUser } from 'react-icons/ai';
-
+import { logout } from '../../Features/loginSlice';
 import NavItem from './NavItem';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useNavigation } from 'react-router-dom';
 import {
   FaDollarSign,
   FaGasPump,
@@ -31,6 +33,7 @@ import {
   FaUsers,
 } from 'react-icons/fa';
 import Breadcrumb from './BreadCrumb';
+import { useDispatch, useSelector } from 'react-redux';
 
 const LinkItems = [
   { name: 'Dashboard', icon: FaHome, to: '/' },
@@ -42,10 +45,20 @@ const LinkItems = [
 ];
 
 const SidebarContent = () => {
+  const location = useLocation();
+  const loginPage = location.pathname === '/';
+
   const navigate = useNavigate();
   const [activeLink, setActiveLink] = useState('/');
   const [pageName, setPageName] = useState('Dashboard');
-  return (
+  const bgColor = useColorModeValue('white', 'gray.900');
+  const { employeeInfo } = useSelector(store => store.employeeLogin);
+  const dispatch = useDispatch();
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate('/');
+  };
+  return loginPage ? null : (
     <>
       <Box>
         <Image
@@ -59,21 +72,25 @@ const SidebarContent = () => {
           pos={'absolute'}
           border="2px solid white"
           _hover={{ cursor: 'pointer' }}
-          right={'145px'}
-          mt={'37px'}
+          right={'75px'}
+          mt={'36px'}
         >
           <Menu>
-            <MenuButton as={Box} p="5px">
+            <MenuButton as={Box} p={'5px'}>
               <HStack color={'white'}>
                 <Icon as={AiOutlineUser} />
-                <Box>Admin</Box>
+                <Box>{employeeInfo && employeeInfo.name}</Box>
               </HStack>
             </MenuButton>
+            <MenuList>
+              <MenuItem>My Profile</MenuItem>
+              <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+            </MenuList>
           </Menu>
         </Box>
         <Box
           transition="3s ease"
-          bg={useColorModeValue('white', 'gray.900')}
+          bg={bgColor}
           border={'1px solid #E2E8F0'}
           borderRadius={'15px'}
           w={260}

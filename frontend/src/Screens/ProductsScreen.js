@@ -4,12 +4,14 @@ import {
   Box,
   Button,
   Divider,
+  Flex,
   HStack,
   Heading,
   Icon,
   Input,
   Menu,
   MenuButton,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -24,11 +26,12 @@ import SearchBar from '../Components/SearchBar';
 import { AiOutlineUser } from 'react-icons/ai';
 import { getProductList } from '../Features/productsListSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { get } from 'mongoose';
 
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
+  const [editedValues, setEditedValues] = useState({}); // Store edited values here
+  console.log(editedValues);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
 
@@ -39,14 +42,42 @@ const ProductsScreen = () => {
   const handleEdit = id => {
     setEditMode(true);
     setEditId(id);
+
+    // Initialize editedValues with the current values from the selected item
+    const selectedItem = products.find(item => item._id === id);
+    setEditedValues({
+      name: selectedItem.name,
+      previousStock: selectedItem.previousStock,
+      newStock: selectedItem.newStock,
+      sale: selectedItem.sale,
+      remainingBalance: selectedItem.remainingBalance,
+      price: selectedItem.price,
+    });
   };
 
   const handleCancel = () => {
     setEditMode(false);
+    setEditId(null);
   };
+
   const handleSubmit = () => {
-    console.log('handle submit');
+    // Handle the submit logic here and update the edited data
+    console.log('Submit:', editedValues);
+    setEditMode(false);
+    setEditId(null);
   };
+
+  const handleInputChange = (key, value) => {
+    if (key !== 'name' && typeof value === 'string' && value !== '') {
+      value = parseInt(value);
+    }
+
+    setEditedValues(prevValues => ({
+      ...prevValues,
+      [key]: value,
+    }));
+  };
+
   return (
     <Box>
       <SearchBar />
@@ -92,115 +123,148 @@ const ProductsScreen = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {products &&
+              {loading ? (
+                <Tr height="80px">
+                  <Td colSpan={8}>
+                    <Flex
+                      justifyContent="center"
+                      alignItems="center"
+                      height="100%"
+                    >
+                      <Spinner color="white" />
+                    </Flex>
+                  </Td>
+                </Tr>
+              ) : (
                 products.map((item, index) => (
-                  <>
-                    <Tr key={index} height={'80px'}>
-                      <Td>
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'} // Adjust the width based on content
-                            value={item.name}
-                            borderColor={'#dc916e'}
-                            focusBorderColor={'#dc916e'}
-                          />
-                        ) : (
-                          <div width={item.name.length * 8 + 'px'}>
-                            {item.name}
-                          </div>
-                        )}
-                      </Td>
-
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'}
-                            value={item.previousStock}
-                          />
-                        ) : (
-                          <div width={item.name.length * 8 + 'px'}>
-                            {item.previousStock}
-                          </div>
-                        )}
-                      </Td>
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'}
-                            value={item.newStock}
-                          />
-                        ) : (
-                          <div width={item.name.length * 8 + 'px'}>
-                            {item.newStock}
-                          </div>
-                        )}
-                      </Td>
-                      <Td>{item.previousStock + item.newStock}</Td>
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'}
-                            value={item.sale}
-                          />
-                        ) : (
-                          <div width={item.name.length * 8 + 'px'}>
-                            {item.sale}
-                          </div>
-                        )}
-                      </Td>
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'}
-                            value={item.remainingBalance}
-                          />
-                        ) : (
-                          <div width={item.name.length * 8 + 'px'}>
-                            Rs. {item.remainingBalance}
-                          </div>
-                        )}
-                      </Td>
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            size={'sm'}
-                            width={item.name.length * 8 + 'px'}
-                            value={item.price}
-                          />
-                        ) : (
-                          <div>Rs. {item.price}</div>
-                        )}
-                      </Td>
-                      <Td>
-                        {editMode && editId === item._id ? (
-                          <HStack>
+                  <Tr key={index} height={'80px'}>
+                    <Td>
+                      {editMode && editId === item._id ? (
+                        <Input
+                          size={'sm'}
+                          value={editedValues.name}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange('name', e.target.value)
+                          }
+                        />
+                      ) : (
+                        <Box>{item.name}</Box>
+                      )}
+                    </Td>
+                    <Td>
+                      {' '}
+                      {editMode && editId === item._id ? (
+                        <Input
+                          type="number"
+                          size={'sm'}
+                          value={editedValues.previousStock}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange('previousStock', e.target.value)
+                          }
+                        />
+                      ) : (
+                        <Box>{item.previousStock}</Box>
+                      )}
+                    </Td>
+                    <Td>
+                      {' '}
+                      {editMode && editId === item._id ? (
+                        <Input
+                          type="number"
+                          size={'sm'}
+                          value={editedValues.newStock}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange('newStock', e.target.value)
+                          }
+                        />
+                      ) : (
+                        <Box>{item.newStock}</Box>
+                      )}
+                    </Td>
+                    <Td>{item.previousStock + item.newStock}</Td>
+                    <Td>
+                      {' '}
+                      {editMode && editId === item._id ? (
+                        <Input
+                          type="number"
+                          size={'sm'}
+                          value={editedValues.sale}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange('sale', e.target.value)
+                          }
+                        />
+                      ) : (
+                        <Box>{item.sale}</Box>
+                      )}
+                    </Td>
+                    <Td>
+                      {' '}
+                      {editMode && editId === item._id ? (
+                        <Input
+                          type="number"
+                          size={'sm'}
+                          value={editedValues.remainingBalance}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange(
+                              'remainingBalance',
+                              e.target.value
+                            )
+                          }
+                        />
+                      ) : (
+                        <Box>Rs. {item.remainingBalance}</Box>
+                      )}
+                    </Td>
+                    <Td>
+                      {' '}
+                      {editMode && editId === item._id ? (
+                        <Input
+                          type="number"
+                          size={'sm'}
+                          value={editedValues.price}
+                          borderColor={'#dc916e'}
+                          focusBorderColor={'#dc916e'}
+                          onChange={e =>
+                            handleInputChange('price', e.target.value)
+                          }
+                        />
+                      ) : (
+                        <Box>Rs. {item.price}</Box>
+                      )}
+                    </Td>
+                    <Td>
+                      {editMode && editId === item._id ? (
+                        <HStack>
+                          <Box _hover={{ cursor: 'pointer !important' }}>
                             <FaTimes
                               color="red"
                               _hover={{ cursor: 'pointer' }}
                               onClick={handleCancel}
                             />
+                          </Box>
+                          <Box _hover={{ cursor: 'pointer ' }}>
                             <FaCheck color="green" onClick={handleSubmit} />
-                          </HStack>
-                        ) : (
-                          <FaEdit
-                            _hover={{ cursor: 'pointer !important' }}
-                            onClick={() => handleEdit(item._id)}
-                          />
-                        )}
-                      </Td>
-                    </Tr>
-                  </>
-                ))}
+                          </Box>
+                        </HStack>
+                      ) : (
+                        <Box _hover={{ cursor: 'pointer ' }}>
+                          <FaEdit onClick={() => handleEdit(item._id)} />
+                        </Box>
+                      )}
+                    </Td>
+                  </Tr>
+                ))
+              )}
             </Tbody>
           </Table>{' '}
         </Box>
