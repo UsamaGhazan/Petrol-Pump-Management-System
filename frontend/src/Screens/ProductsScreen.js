@@ -26,6 +26,7 @@ import SearchBar from '../Components/SearchBar';
 import { AiOutlineUser } from 'react-icons/ai';
 import { getProductList } from '../Features/productsListSlice';
 import { useSelector, useDispatch } from 'react-redux';
+import { updateProduct } from '../Features/productUpdateSlice';
 
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
@@ -34,6 +35,12 @@ const ProductsScreen = () => {
   console.log(editedValues);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
+  const {
+    error: updateError,
+    loading: updateLoading,
+    product: updatedProduct,
+    success,
+  } = useSelector(store => store.productList);
 
   useEffect(() => {
     dispatch(getProductList());
@@ -61,9 +68,19 @@ const ProductsScreen = () => {
   };
 
   const handleSubmit = () => {
-    // Handle the submit logic here and update the edited data
-    console.log('Submit:', editedValues);
+    console.log(editedValues);
     setEditMode(false);
+    dispatch(
+      updateProduct({
+        id: editId,
+        name: editedValues.name,
+        previousStock: editedValues.previousStock,
+        newStock: editedValues.newStock,
+        sale: editedValues.sale,
+        remainingBalance: editedValues.remainingBalance,
+        price: editedValues.price,
+      })
+    );
     setEditId(null);
   };
 
