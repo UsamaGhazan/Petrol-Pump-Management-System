@@ -21,12 +21,13 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { FaCheck, FaEdit, FaPlus, FaTimes } from 'react-icons/fa'; // Import the FaEdit icon
+import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
 import SearchBar from '../Components/SearchBar';
 import { AiOutlineUser } from 'react-icons/ai';
 import { getProductList } from '../Features/productsListSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProduct } from '../Features/productUpdateSlice';
+import { deleteProduct } from '../Features/productDeleteSlice';
 
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
@@ -35,6 +36,11 @@ const ProductsScreen = () => {
   console.log(editedValues);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
+  const {
+    error: deleteError,
+    loading: deleteLoading,
+    success: deleteSuccess,
+  } = useSelector(store => store.productDelete);
   const {
     error: updateError,
     loading: updateLoading,
@@ -50,7 +56,6 @@ const ProductsScreen = () => {
     setEditMode(true);
     setEditId(id);
 
-    // Initialize editedValues with the current values from the selected item
     const selectedItem = products.find(item => item._id === id);
     setEditedValues({
       name: selectedItem.name,
@@ -95,6 +100,10 @@ const ProductsScreen = () => {
     }));
   };
 
+  const handleDelete = id => {
+    dispatch(deleteProduct(id));
+  };
+
   return (
     <Box>
       <SearchBar />
@@ -130,13 +139,17 @@ const ProductsScreen = () => {
             <Thead>
               <Tr>
                 <Th color={'#A0AEC0'}>Name</Th>
-                <Th color={'#A0AEC0'}>Previous Stock</Th>
+                <Th color={'#A0AEC0'} width={'190px'}>
+                  Previous Stock
+                </Th>
                 <Th color={'#A0AEC0'}>New Stock</Th>
                 <Th color={'#A0AEC0'}>Total</Th>
                 <Th color={'#A0AEC0'}>Sale</Th>
-                <Th color={'#A0AEC0'}>Remaining Balance</Th>
+                <Th color={'#A0AEC0'} width={'190px'}>
+                  Remaining Balance
+                </Th>
                 <Th color={'#A0AEC0'}>Price</Th>
-                <Th color={'#A0AEC0'}>Edit</Th>
+                <Th color={'#A0AEC0'}>Edit/Delete</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -274,9 +287,14 @@ const ProductsScreen = () => {
                           </Box>
                         </HStack>
                       ) : (
-                        <Box _hover={{ cursor: 'pointer ' }}>
-                          <FaEdit onClick={() => handleEdit(item._id)} />
-                        </Box>
+                        <HStack>
+                          <Box _hover={{ cursor: 'pointer ' }}>
+                            <FaEdit onClick={() => handleEdit(item._id)} />
+                          </Box>
+                          <Box _hover={{ cursor: 'pointer ' }}>
+                            <FaTrash onClick={() => handleDelete(item._id)} />
+                          </Box>
+                        </HStack>
                       )}
                     </Td>
                   </Tr>

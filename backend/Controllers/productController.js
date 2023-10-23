@@ -27,4 +27,16 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAllProducts, updateProduct };
+const deleteProduct = asyncHandler(async (req, res) => {
+  console.log(req);
+  const product = await Product.findById(req.params.id);
+  if (product) {
+    await product.deleteOne();
+    res.json({ message: 'Product removed' });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
+
+export { getAllProducts, updateProduct, deleteProduct };
