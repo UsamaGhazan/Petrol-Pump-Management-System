@@ -40,6 +40,8 @@ import { updateProduct } from '../Features/productUpdateSlice';
 import { deleteProduct } from '../Features/productDeleteSlice';
 import { PRODUCT_LIST_RESET } from '../Features/productsListSlice';
 import { createProduct } from '../Features/productCreateSlice';
+import { PRODUCT_CREATE_RESET } from '../Features/productCreateSlice';
+import { PRODUCT_UPDATE_RESET } from '../Features/productUpdateSlice';
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -135,6 +137,7 @@ const ProductsScreen = () => {
 
       const timeout = setTimeout(() => {
         setSuccessAlert(false);
+        dispatch(PRODUCT_UPDATE_RESET());
       }, 3000);
 
       // Cleanup the timeout when the component unmounts or when the alert is hidden
@@ -150,6 +153,7 @@ const ProductsScreen = () => {
 
       const timeout = setTimeout(() => {
         setSuccessAlert(false);
+        dispatch(PRODUCT_CREATE_RESET());
       }, 3000);
 
       // Cleanup the timeout when the component unmounts or when the alert is hidden
@@ -158,7 +162,7 @@ const ProductsScreen = () => {
       // Set successAlert to false if success becomes false
       setSuccessAlert(false);
     }
-  }, [createProductSuccess]);
+  }, [createProductSuccess, dispatch]);
 
   const handleCreateProduct = () => {
     dispatch(createProduct());
@@ -167,25 +171,17 @@ const ProductsScreen = () => {
   return (
     <Box>
       <div className="alert-overlay">
-        {successAlert && (
+        {(successAlert || createProductSuccess) && (
           <Alert
             ml="388px"
             status="info"
-            className={successAlert ? 'fade-in-slide-down' : ''}
-          >
-            <AlertIcon />
-            <AlertDescription>{success && 'Product Updated'}</AlertDescription>
-          </Alert>
-        )}
-        {createProductSuccess && (
-          <Alert
-            ml="388px"
-            status="info"
-            className={createProductSuccess ? 'fade-in-slide-down' : ''}
+            className={
+              success || createProductSuccess ? 'fade-in-slide-down' : ''
+            }
           >
             <AlertIcon />
             <AlertDescription>
-              {createProductSuccess && 'New Product Added'}
+              {success ? 'Product Updated' : 'New Product Added'}
             </AlertDescription>
           </Alert>
         )}
@@ -435,8 +431,8 @@ const ProductsScreen = () => {
             <HStack ml={'125px'}>
               <Button
                 color={'white'}
-                _hover={{ bg: '#3182ce' }}
-                _active={{ bg: '#3182ce' }}
+                _hover={{ bg: '#2D75B7' }}
+                _active={{ bg: '#2D75B7' }}
                 bg={'#3182ce'}
                 width={'80px'}
                 onClick={handleDelete}

@@ -15,7 +15,7 @@ export const deleteEmployee = createAsyncThunk(
           Authorization: `Bearer ${employeeInfo.token}`,
         },
       };
-      await axios.delete(`/api/employee/${id}`, config);
+      await axios.delete(`/api/admin/${id}`, config);
     } catch (error) {
       const newError =
         error.response && error.response.data.message

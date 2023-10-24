@@ -20,9 +20,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-const getAllEmployees = asyncHandler(async (req, res) => {
-  const employees = await Employee.find({});
-  res.json(employees);
-});
-
-export { authUser, getAllEmployees };
+export { authUser };
