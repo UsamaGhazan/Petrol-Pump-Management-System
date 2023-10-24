@@ -19,6 +19,17 @@ import {
   Thead,
   Tr,
   VStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Alert,
+  AlertDescription,
+  AlertIcon,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
@@ -28,12 +39,15 @@ import { getProductList } from '../Features/productsListSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProduct } from '../Features/productUpdateSlice';
 import { deleteProduct } from '../Features/productDeleteSlice';
+import { PRODUCT_LIST_RESET } from '../Features/productsListSlice';
+import { PRODUCT_UPDATE_RESET } from '../Features/productUpdateSlice';
 
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editedValues, setEditedValues] = useState({}); // Store edited values here
-  console.log(editedValues);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [successAlert, setSuccessAlert] = useState(false);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
   const {
@@ -46,8 +60,7 @@ const ProductsScreen = () => {
     loading: updateLoading,
     product: updatedProduct,
     success,
-  } = useSelector(store => store.productList);
-
+  } = useSelector(store => store.productUpdate);
   useEffect(() => {
     dispatch(getProductList());
   }, [dispatch]);
@@ -73,7 +86,6 @@ const ProductsScreen = () => {
   };
 
   const handleSubmit = () => {
-    console.log(editedValues);
     setEditMode(false);
     dispatch(
       updateProduct({
@@ -86,6 +98,7 @@ const ProductsScreen = () => {
         price: editedValues.price,
       })
     );
+
     setEditId(null);
   };
 
@@ -100,12 +113,46 @@ const ProductsScreen = () => {
     }));
   };
 
-  const handleDelete = id => {
-    dispatch(deleteProduct(id));
+  const handleDelete = () => {
+    dispatch(deleteProduct(editId));
+    dispatch(PRODUCT_LIST_RESET(editId));
+    onClose();
   };
+  const handleModal = id => {
+    onOpen();
+    setEditId(id);
+  };
+
+  useEffect(() => {
+    if (success) {
+      setSuccessAlert(true);
+
+      const timeout = setTimeout(() => {
+        setSuccessAlert(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when the alert is hidden
+      return () => clearTimeout(timeout);
+    } else {
+      // Set successAlert to false if success becomes false
+      setSuccessAlert(false);
+    }
+  }, [success]);
 
   return (
     <Box>
+      <div className="alert-overlay">
+        {successAlert && (
+          <Alert
+            ml="388px"
+            status="info"
+            className={successAlert ? 'fade-in-slide-down' : ''}
+          >
+            <AlertIcon />
+            <AlertDescription>{success && 'Product Updated'}</AlertDescription>
+          </Alert>
+        )}
+      </div>
       <SearchBar />
 
       <Box
@@ -139,7 +186,7 @@ const ProductsScreen = () => {
             <Thead>
               <Tr>
                 <Th color={'#A0AEC0'}>Name</Th>
-                <Th color={'#A0AEC0'} width={'190px'}>
+                <Th color={'#A0AEC0'} width={'185px'}>
                   Previous Stock
                 </Th>
                 <Th color={'#A0AEC0'}>New Stock</Th>
@@ -180,7 +227,11 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>{item.name}</Box>
+                        <Box>
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.name
+                            : item.name}
+                        </Box>
                       )}
                     </Td>
                     <Td>
@@ -197,7 +248,11 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>{item.previousStock}</Box>
+                        <Box>
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.previousStock
+                            : item.previousStock}
+                        </Box>
                       )}
                     </Td>
                     <Td>
@@ -214,10 +269,18 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>{item.newStock}</Box>
+                        <Box>
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.newStock
+                            : item.newStock}
+                        </Box>
                       )}
                     </Td>
-                    <Td>{item.previousStock + item.newStock}</Td>
+                    <Td>
+                      {updatedProduct && updatedProduct._id === item._id
+                        ? updatedProduct.previousStock + updatedProduct.newStock
+                        : item.previousStock + item.newStock}
+                    </Td>
                     <Td>
                       {' '}
                       {editMode && editId === item._id ? (
@@ -232,7 +295,11 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>{item.sale}</Box>
+                        <Box>
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.sale
+                            : item.sale}
+                        </Box>
                       )}
                     </Td>
                     <Td>
@@ -252,7 +319,12 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>Rs. {item.remainingBalance}</Box>
+                        <Box>
+                          Rs.{' '}
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.remainingBalance
+                            : item.remainingBalance}
+                        </Box>
                       )}
                     </Td>
                     <Td>
@@ -269,7 +341,12 @@ const ProductsScreen = () => {
                           }
                         />
                       ) : (
-                        <Box>Rs. {item.price}</Box>
+                        <Box>
+                          Rs.{' '}
+                          {updatedProduct && updatedProduct._id === item._id
+                            ? updatedProduct.price
+                            : item.price}
+                        </Box>
                       )}
                     </Td>
                     <Td>
@@ -291,8 +368,9 @@ const ProductsScreen = () => {
                           <Box _hover={{ cursor: 'pointer ' }}>
                             <FaEdit onClick={() => handleEdit(item._id)} />
                           </Box>
+
                           <Box _hover={{ cursor: 'pointer ' }}>
-                            <FaTrash onClick={() => handleDelete(item._id)} />
+                            <FaTrash onClick={() => handleModal(item._id)} />
                           </Box>
                         </HStack>
                       )}
@@ -304,6 +382,30 @@ const ProductsScreen = () => {
           </Table>{' '}
         </Box>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            Are you sure you want to delete this product?
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack ml={'125px'}>
+              <Button
+                color={'white'}
+                _hover={{ bg: '#3182ce' }}
+                _active={{ bg: '#3182ce' }}
+                bg={'#3182ce'}
+                width={'80px'}
+                onClick={handleDelete}
+              >
+                {deleteLoading ? <Spinner /> : <Box>Yes</Box>}
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </HStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

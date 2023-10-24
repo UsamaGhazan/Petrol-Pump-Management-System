@@ -3,26 +3,26 @@ import axios from 'axios';
 
 const initialState = {
   loading: false,
-  products: [],
+  employees: [],
   error: '',
 };
 
-export const getProductList = createAsyncThunk('getProductList', async () => {
+export const getEmployeeList = createAsyncThunk('getEmployeeList', async () => {
   try {
-    const { data } = await axios.get(`/api/products`);
+    const { data } = await axios.get(`/api/admin`);
     return data;
   } catch (error) {
     return error;
   }
 });
 
-export const productListSlice = createSlice({
-  name: 'productList',
+export const employeeListSlice = createSlice({
+  name: 'employeeList',
   initialState,
   reducers: {
-    PRODUCT_LIST_RESET: (state, action) => {
-      state.products = state.products.filter(
-        product => product._id !== action.payload
+    EMPLOYEE_LIST_RESET: (state, action) => {
+      state.employees = state.employees.filter(
+        employee => employee._id !== action.payload
       );
     },
     // PRODUCT_UPDATE_RESET: (state, action) => {
@@ -37,18 +37,18 @@ export const productListSlice = createSlice({
     // },
   },
   extraReducers: {
-    [getProductList.pending]: state => {
+    [getEmployeeList.pending]: state => {
       return {
         loading: true,
       };
     },
-    [getProductList.fulfilled]: (state, action) => {
+    [getEmployeeList.fulfilled]: (state, action) => {
       return {
         loading: false,
         products: action.payload,
       };
     },
-    [getProductList.rejected]: (state, action) => {
+    [getEmployeeList.rejected]: (state, action) => {
       return {
         loading: false,
         error: action.payload,
@@ -56,5 +56,5 @@ export const productListSlice = createSlice({
     },
   },
 });
-export const { PRODUCT_LIST_RESET } = productListSlice.actions;
-export default productListSlice.reducer;
+export const { EMPLOYEE_LIST_RESET } = employeeListSlice.actions;
+export default employeeListSlice.reducer;
