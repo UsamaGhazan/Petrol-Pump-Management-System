@@ -34,20 +34,19 @@ import {
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
 import SearchBar from '../Components/SearchBar';
-import { AiOutlineUser } from 'react-icons/ai';
 import { getProductList } from '../Features/productsListSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProduct } from '../Features/productUpdateSlice';
 import { deleteProduct } from '../Features/productDeleteSlice';
 import { PRODUCT_LIST_RESET } from '../Features/productsListSlice';
-import { PRODUCT_UPDATE_RESET } from '../Features/productUpdateSlice';
-
+import { createProduct } from '../Features/productCreateSlice';
 const ProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editedValues, setEditedValues] = useState({}); // Store edited values here
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [successAlert, setSuccessAlert] = useState(false);
+  const [createproductSuccess, setCreateProductSuccess] = useState(false);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
   const {
@@ -61,6 +60,13 @@ const ProductsScreen = () => {
     product: updatedProduct,
     success,
   } = useSelector(store => store.productUpdate);
+
+  const {
+    error: createProductError,
+    loading: createProductLoading,
+    success: createProductSuccess,
+    product: createdProduct,
+  } = useSelector(store => store.productCreate);
   useEffect(() => {
     dispatch(getProductList());
   }, [dispatch]);
@@ -138,6 +144,25 @@ const ProductsScreen = () => {
       setSuccessAlert(false);
     }
   }, [success]);
+  useEffect(() => {
+    if (createProductSuccess) {
+      setSuccessAlert(true);
+
+      const timeout = setTimeout(() => {
+        setSuccessAlert(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when the alert is hidden
+      return () => clearTimeout(timeout);
+    } else {
+      // Set successAlert to false if success becomes false
+      setSuccessAlert(false);
+    }
+  }, [createProductSuccess]);
+
+  const handleCreateProduct = () => {
+    dispatch(createProduct());
+  };
 
   return (
     <Box>
@@ -150,6 +175,18 @@ const ProductsScreen = () => {
           >
             <AlertIcon />
             <AlertDescription>{success && 'Product Updated'}</AlertDescription>
+          </Alert>
+        )}
+        {createProductSuccess && (
+          <Alert
+            ml="388px"
+            status="info"
+            className={createProductSuccess ? 'fade-in-slide-down' : ''}
+          >
+            <AlertIcon />
+            <AlertDescription>
+              {createProductSuccess && 'New Product Added'}
+            </AlertDescription>
           </Alert>
         )}
       </div>
@@ -172,10 +209,13 @@ const ProductsScreen = () => {
             </Heading>
 
             <Button
+              isLoading={createProductLoading}
+              loadingText="Adding..."
               bg={'#3182ce'}
               color={'white'}
               _hover={{ bg: '#2D75B7' }}
               _active={{ bg: '#2D75B7' }}
+              onClick={handleCreateProduct}
             >
               {' '}
               <Icon as={FaPlus} fontSize={'14px'} />
@@ -238,6 +278,7 @@ const ProductsScreen = () => {
                       {' '}
                       {editMode && editId === item._id ? (
                         <Input
+                          width={'81px'}
                           type="number"
                           size={'sm'}
                           value={editedValues.previousStock}
@@ -306,6 +347,7 @@ const ProductsScreen = () => {
                       {' '}
                       {editMode && editId === item._id ? (
                         <Input
+                          width={'81px'}
                           type="number"
                           size={'sm'}
                           value={editedValues.remainingBalance}

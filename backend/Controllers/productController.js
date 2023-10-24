@@ -38,4 +38,18 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export { getAllProducts, updateProduct, deleteProduct };
+const createProduct = asyncHandler(async (req, res) => {
+  const product = new Product({
+    name: 'Sample name',
+    previousStock: 0,
+    newStock: 0,
+    sale: 0,
+    remainingBalance: 0,
+    price: 0,
+  });
+
+  const createdProduct = await product.save();
+  res.status(201).json(createdProduct);
+});
+
+export { getAllProducts, updateProduct, deleteProduct, createProduct };

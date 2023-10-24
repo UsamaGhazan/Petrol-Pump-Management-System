@@ -25,16 +25,6 @@ export const productListSlice = createSlice({
         product => product._id !== action.payload
       );
     },
-    // PRODUCT_UPDATE_RESET: (state, action) => {
-    //   const updatedProduct = action.payload; // This should be the updated product data received from the API
-    //   const updatedIndex = state.products.findIndex(
-    //     product => product._id === updatedProduct._id
-    //   );
-
-    //   if (updatedIndex !== -1) {
-    //     state.products[updatedIndex] = updatedProduct;
-    //   }
-    // },
   },
   extraReducers: {
     [getProductList.pending]: state => {
