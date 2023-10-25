@@ -6,6 +6,7 @@ const initialState = {};
 export const createEmployee = createAsyncThunk(
   'createEmployee',
   async (newEmployee, thunkAPI) => {
+    console.log(newEmployee);
     try {
       const {
         employeeLogin: { employeeInfo },

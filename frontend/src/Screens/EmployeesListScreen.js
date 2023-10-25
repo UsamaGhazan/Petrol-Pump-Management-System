@@ -114,7 +114,7 @@ const EmployeesListScreen = () => {
 
             <Button
               as={RouterLink}
-              to={'/addNewEmployee'}
+              to={'/addEmployee'}
               bg={'#3182ce'}
               color={'white'}
               _hover={{ bg: '#2D75B7' }}

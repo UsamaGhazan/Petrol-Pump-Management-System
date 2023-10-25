@@ -48,7 +48,6 @@ const ProductsScreen = () => {
   const [editedValues, setEditedValues] = useState({}); // Store edited values here
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [successAlert, setSuccessAlert] = useState(false);
-  const [createproductSuccess, setCreateProductSuccess] = useState(false);
   const dispatch = useDispatch();
   const { error, loading, products } = useSelector(store => store.productList);
   const {
