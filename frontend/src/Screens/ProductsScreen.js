@@ -146,7 +146,7 @@ const ProductsScreen = () => {
       // Set successAlert to false if success becomes false
       setSuccessAlert(false);
     }
-  }, [success]);
+  }, [dispatch, success]);
   useEffect(() => {
     if (createProductSuccess) {
       setSuccessAlert(true);

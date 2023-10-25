@@ -23,7 +23,7 @@ export const store = configureStore({
     productUpdate: productUpdateSlice,
     productDelete: productDeleteSlice,
     productCreate: productCreateSlice,
-    employeeList: employeeListSlice,
+    employeesList: employeeListSlice,
     employeeDelete: employeeDeleteSlice,
     employeeCreate: employeeCreateSlice,
   },

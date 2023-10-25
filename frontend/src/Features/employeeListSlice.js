@@ -45,7 +45,7 @@ export const employeeListSlice = createSlice({
     [getEmployeeList.fulfilled]: (state, action) => {
       return {
         loading: false,
-        products: action.payload,
+        employees: action.payload,
       };
     },
     [getEmployeeList.rejected]: (state, action) => {

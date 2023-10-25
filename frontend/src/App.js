@@ -20,8 +20,9 @@ import {
 import HomeScreen from './Screens/HomeScreen';
 import SidebarContent from './Components/Dashboard Components/SidebarContent';
 import ProductsScreen from './Screens/ProductsScreen';
-import EmployeeListScreen from './Screens/EmployeeListScreen';
 import LoginScreen from './Screens/LoginScreen';
+import EmployeesListScreen from './Screens/EmployeesListScreen';
+import AddNewEmployeeScreen from './Screens/AddNewEmployeeScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -31,7 +32,8 @@ function App() {
           <Route path="/" element={<LoginScreen />} />
           <Route path="/dashboard" element={<HomeScreen />} />
           <Route path="/products" element={<ProductsScreen />} />
-          <Route path="/employees" element={<EmployeeListScreen />} />
+          <Route path="/employees" element={<EmployeesListScreen />} />
+          <Route path="/addEmployee" element={<AddNewEmployeeScreen />} />
         </Routes>
       </main>
     </BrowserRouter>

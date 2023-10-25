@@ -31,25 +31,27 @@ import {
   AlertDescription,
   AlertIcon,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
 import SearchBar from '../Components/SearchBar';
 import { getEmployeeList } from '../Features/employeeListSlice';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProduct } from '../Features/productUpdateSlice';
-import { deleteProduct } from '../Features/productDeleteSlice';
-import { PRODUCT_LIST_RESET } from '../Features/productsListSlice';
-import { createProduct } from '../Features/productCreateSlice';
-import { PRODUCT_CREATE_RESET } from '../Features/productCreateSlice';
-import { PRODUCT_UPDATE_RESET } from '../Features/productUpdateSlice';
+import { EMPLOYEE_LIST_RESET } from '../Features/employeeListSlice';
+import { deleteEmployee } from '../Features/employeeDeleteSlice';
 
-const ProductsScreen = () => {
-  const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
-  const [editedValues, setEditedValues] = useState({}); // Store edited values here
+const formatDate = date => {
+  const dateObject = new Date(date);
+
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  const formattedDate = dateObject.toLocaleDateString('en-US', options);
+  return formattedDate;
+};
+
+const EmployeesListScreen = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [deleteId, setDeleteId] = useState(null);
   const [successAlert, setSuccessAlert] = useState(false);
-  const [createproductSuccess, setCreateProductSuccess] = useState(false);
   const dispatch = useDispatch();
   const { error, loading, employees } = useSelector(
     store => store.employeesList
@@ -60,73 +62,24 @@ const ProductsScreen = () => {
     success: deleteSuccess,
   } = useSelector(store => store.employeeDelete);
 
-  // const {
-  //   error: createEmployeeError,
-  //   loading: createEmployeeLoading,
-  //   success: createEmployeeSuccess,
-  //   product: createdEmployee,
-  // } = useSelector(store => store.employeeCreate);
-
   useEffect(() => {
     dispatch(getEmployeeList());
   }, [dispatch]);
 
-  
-
-  
-
-
-  
-
-  // const handleDelete = () => {
-  //   dispatch(deleteProduct(editId));
-  //   dispatch(PRODUCT_LIST_RESET(editId));
-  //   onClose();
-  // };
-  // const handleModal = id => {
-  //   onOpen();
-  //   setEditId(id);
-  // };
-
-  // useEffect(() => {
-  //   if (success) {
-  //     setSuccessAlert(true);
-
-  //     const timeout = setTimeout(() => {
-  //       setSuccessAlert(false);
-  //       dispatch(PRODUCT_UPDATE_RESET());
-  //     }, 3000);
-
-      // Cleanup the timeout when the component unmounts or when the alert is hidden
-  //     return () => clearTimeout(timeout);
-  //   } else {
-      // Set successAlert to false if success becomes false
-  //     setSuccessAlert(false);
-  //   }
-  // }, [success]);
-  // useEffect(() => {
-  //   if (createProductSuccess) {
-  //     setSuccessAlert(true);
-
-  //     const timeout = setTimeout(() => {
-  //       setSuccessAlert(false);
-  //       dispatch(PRODUCT_CREATE_RESET());
-  //     }, 3000);
-
-      // Cleanup the timeout when the component unmounts or when the alert is hidden
-  //     return () => clearTimeout(timeout);
-  //   } else {
-      // Set successAlert to false if success becomes false
-  //     setSuccessAlert(false);
-  //   }
-  // }, [createProductSuccess, dispatch]);
-
-  
+  const handleDelete = () => {
+    dispatch(deleteEmployee(deleteId));
+    dispatch(EMPLOYEE_LIST_RESET(deleteId));
+    onClose();
+  };
+  const handleModal = id => {
+    onOpen();
+    setDeleteId(id);
+  };
 
   return (
     <Box>
-      <div className="alert-overlay">
-        {(successAlert || createProductSuccess) && (
+      {/* <div className="alert-overlay">
+        {(successAlert) && (
           <Alert
             ml="388px"
             status="info"
@@ -140,7 +93,7 @@ const ProductsScreen = () => {
             </AlertDescription>
           </Alert>
         )}
-      </div>
+      </div> */}
       <SearchBar />
 
       <Box
@@ -156,21 +109,20 @@ const ProductsScreen = () => {
         <Box padding={'24px'}>
           <HStack spacing={'800px'}>
             <Heading fontSize={'20px'} fontWeight={700} fontFamily={'lato'}>
-              Products List
+              Employees List
             </Heading>
 
             <Button
-              isLoading={createProductLoading}
-              loadingText="Adding..."
+              as={RouterLink}
+              to={'/addNewEmployee'}
               bg={'#3182ce'}
               color={'white'}
               _hover={{ bg: '#2D75B7' }}
               _active={{ bg: '#2D75B7' }}
-              onClick={handleCreateProduct}
             >
               {' '}
               <Icon as={FaPlus} fontSize={'14px'} />
-              <Box p={'3px'}> Add New Product</Box>
+              <Box p={'3px'}> Add New Employee</Box>
             </Button>
           </HStack>
           <Table variant="striped" colorScheme="customColorScheme" mt={'20px'}>
@@ -179,7 +131,7 @@ const ProductsScreen = () => {
                 <Th color={'#A0AEC0'}>Name</Th>
                 <Th color={'#A0AEC0'}>Role</Th>
                 <Th color={'#A0AEC0'}>Employed</Th>
-                <Th color={'#A0AEC0'}>Edit/Delete</Th>
+                <Th color={'#A0AEC0'}>Delete</Th>
               </Tr>
             </Thead>{' '}
             <Tbody>
@@ -196,7 +148,7 @@ const ProductsScreen = () => {
                   </Td>
                 </Tr>
               ) : (
-                products.map((item, index) => (
+                employees.map((item, index) => (
                   <Tr key={index} height={'80px'}>
                     <Td>
                       <VStack alignItems={'flex-start'}>
@@ -204,34 +156,12 @@ const ProductsScreen = () => {
                         <Box fontSize={'14px'}>{item.email}</Box>
                       </VStack>
                     </Td>{' '}
-                    */
                     <Td fontWeight={'500'}>{item.role}</Td>
-                    <Td fontWeight={'500'}>{item.employed}</Td>
+                    <Td fontWeight={'500'}>{formatDate(item.employed)}</Td>
                     <Td>
-                      {editMode && editId === item._id ? (
-                        <HStack>
-                          <Box _hover={{ cursor: 'pointer !important' }}>
-                            <FaTimes
-                              color="red"
-                              _hover={{ cursor: 'pointer' }}
-                              onClick={handleCancel}
-                            />
-                          </Box>
-                          <Box _hover={{ cursor: 'pointer ' }}>
-                            <FaCheck color="green" onClick={handleSubmit} />
-                          </Box>
-                        </HStack>
-                      ) : (
-                        <HStack>
-                          <Box _hover={{ cursor: 'pointer ' }}>
-                            <FaEdit onClick={() => handleEdit(item._id)} />
-                          </Box>
-
-                          <Box _hover={{ cursor: 'pointer ' }}>
-                            <FaTrash onClick={() => handleModal(item._id)} />
-                          </Box>
-                        </HStack>
-                      )}
+                      <Box _hover={{ cursor: 'pointer ' }}>
+                        <FaTrash onClick={() => handleModal(item._id)} />
+                      </Box>
                     </Td>
                   </Tr>
                 ))
@@ -244,7 +174,7 @@ const ProductsScreen = () => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Are you sure you want to delete this product?
+            Are you sure you want to remove this employee?
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -268,4 +198,4 @@ const ProductsScreen = () => {
   );
 };
 
-export default ProductsScreen;
+export default EmployeesListScreen;
