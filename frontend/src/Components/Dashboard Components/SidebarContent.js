@@ -12,6 +12,8 @@ import {
   HStack,
   MenuList,
   MenuItem,
+  Divider,
+  Heading,
 } from '@chakra-ui/react';
 import {
   FiSettings,
@@ -19,6 +21,9 @@ import {
   FiCalendar,
   FiDollarSign,
   FiMessageSquare,
+  FiUser,
+  FiLogIn,
+  FiLogOut,
 } from 'react-icons/fi';
 import { AiOutlineUser } from 'react-icons/ai';
 import { logout } from '../../Features/loginSlice';
@@ -43,6 +48,7 @@ const LinkItems = [
   { name: 'Petroleum Products', icon: FaGasPump, to: '/petroleumProducts' },
   { name: 'Set Product Prices', icon: FaDollarSign, to: '/setPrices' },
 ];
+const accountItems = [{ name: 'Profile', icon: FiUser, to: '/profile' }];
 
 const SidebarContent = () => {
   const location = useLocation();
@@ -58,6 +64,7 @@ const SidebarContent = () => {
     dispatch(logout());
     navigate('/');
   };
+
   return loginPage ? null : (
     <>
       <Box>
@@ -132,7 +139,23 @@ const SidebarContent = () => {
                 {link.name}
               </NavItem>
             ))}
+            <Divider my={2} borderColor="gray.400" />
+            {accountItems.map(link => (
+              <NavItem
+                key={link.name}
+                icon={link.icon}
+                to={link.to}
+                onClick={() => {
+                  setPageName(link.name);
+                  setActiveLink(link.to);
+                  navigate(link.to);
+                }}
+              >
+                {link.name}
+              </NavItem>
+            ))}
           </Box>
+
           <Box>
             <Image
               src={require('../../assets/images/SidebarHelpImage.png')}

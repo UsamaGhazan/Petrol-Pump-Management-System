@@ -23,6 +23,9 @@ import ProductsScreen from './Screens/ProductsScreen';
 import LoginScreen from './Screens/LoginScreen';
 import EmployeesListScreen from './Screens/EmployeesListScreen';
 import AddNewEmployeeScreen from './Screens/AddNewEmployeeScreen';
+import PetroleumProductsScreen from './Screens/PetroleumProductsScreen';
+import SetPricesScreen from './Screens/SetPrices';
+import ProfilePage from './Screens/ProfileScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -34,6 +37,13 @@ function App() {
           <Route path="/products" element={<ProductsScreen />} />
           <Route path="/employees" element={<EmployeesListScreen />} />
           <Route path="/addEmployee" element={<AddNewEmployeeScreen />} />
+          <Route path="/setPrices" element={<SetPricesScreen />} />
+          <Route path="/profile" element={<ProfilePage />} />
+
+          <Route
+            path="/petroleumProducts"
+            element={<PetroleumProductsScreen />}
+          />
         </Routes>
       </main>
     </BrowserRouter>

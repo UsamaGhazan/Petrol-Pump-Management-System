@@ -39,10 +39,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { updateProduct } from '../Features/productUpdateSlice';
 import { deleteProduct } from '../Features/productDeleteSlice';
 import { PRODUCT_LIST_RESET } from '../Features/productsListSlice';
-import { createProduct } from '../Features/productCreateSlice';
 import { PRODUCT_CREATE_RESET } from '../Features/productCreateSlice';
 import { PRODUCT_UPDATE_RESET } from '../Features/productUpdateSlice';
-const ProductsScreen = () => {
+const PetroleumProductsScreen = () => {
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [editedValues, setEditedValues] = useState({}); // Store edited values here
@@ -71,21 +70,6 @@ const ProductsScreen = () => {
   useEffect(() => {
     dispatch(getProductList());
   }, [dispatch]);
-
-  const handleEdit = id => {
-    setEditMode(true);
-    setEditId(id);
-
-    const selectedItem = products.find(item => item._id === id);
-    setEditedValues({
-      name: selectedItem.name,
-      previousStock: selectedItem.previousStock,
-      newStock: selectedItem.newStock,
-      sale: selectedItem.sale,
-      remainingBalance: selectedItem.remainingBalance,
-      price: selectedItem.price,
-    });
-  };
 
   const handleCancel = () => {
     setEditMode(false);
@@ -162,10 +146,6 @@ const ProductsScreen = () => {
     }
   }, [createProductSuccess, dispatch]);
 
-  const handleCreateProduct = () => {
-    dispatch(createProduct());
-  };
-
   return (
     <Box>
       <div className="alert-overlay">
@@ -199,22 +179,8 @@ const ProductsScreen = () => {
         <Box padding={'24px'}>
           <HStack spacing={'800px'}>
             <Heading fontSize={'20px'} fontWeight={700} fontFamily={'lato'}>
-              Products List
+              Petroleum Products
             </Heading>
-
-            <Button
-              isLoading={createProductLoading}
-              loadingText="Adding..."
-              bg={'#3182ce'}
-              color={'white'}
-              _hover={{ bg: '#2D75B7' }}
-              _active={{ bg: '#2D75B7' }}
-              onClick={handleCreateProduct}
-            >
-              {' '}
-              <Icon as={FaPlus} fontSize={'14px'} />
-              <Box p={'3px'}> Add New Product</Box>
-            </Button>
           </HStack>
           <Table variant="striped" colorScheme="customColorScheme" mt={'20px'}>
             <Thead>
@@ -230,7 +196,7 @@ const ProductsScreen = () => {
                   Remaining Balance
                 </Th>
                 <Th color={'#A0AEC0'}>Price</Th>
-                <Th color={'#A0AEC0'}>Edit/Delete</Th>
+                <Th color={'#A0AEC0'}>Delete</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -250,9 +216,9 @@ const ProductsScreen = () => {
                 products
                   .filter(
                     item =>
-                      item.name !== 'Petrol' &&
-                      item.name !== 'High Octane' &&
-                      item.name !== 'Diesel'
+                      item.name === 'Petrol' ||
+                      item.name === 'High Octane' ||
+                      item.name === 'Diesel'
                   )
                   .map((item, index) => (
                     <Tr key={index} height={'80px'}>
@@ -410,10 +376,6 @@ const ProductsScreen = () => {
                         ) : (
                           <HStack>
                             <Box _hover={{ cursor: 'pointer ' }}>
-                              <FaEdit onClick={() => handleEdit(item._id)} />
-                            </Box>
-
-                            <Box _hover={{ cursor: 'pointer ' }}>
                               <FaTrash onClick={() => handleModal(item._id)} />
                             </Box>
                           </HStack>
@@ -454,4 +416,4 @@ const ProductsScreen = () => {
   );
 };
 
-export default ProductsScreen;
+export default PetroleumProductsScreen;
