@@ -142,9 +142,9 @@ const AddNewEmployeeScreen = () => {
               value={employeeData.role}
               onChange={handleChange}
             >
-              <option value="developer">Developer</option>
-              <option value="manager">Manager</option>
-              <option value="designer">Designer</option>
+              <option value="Admin">Admin</option>
+              <option value="Manager">Manager</option>
+              <option value="Employees">Employee</option>
             </Select>
           </FormControl>
 

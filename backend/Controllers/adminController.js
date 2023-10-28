@@ -33,4 +33,39 @@ const createEmployee = asyncHandler(async (req, res) => {
   res.status(201).json(createdEmployee);
 });
 
-export { getAllEmployees, deleteEmployee, createEmployee };
+const updateEmployee = asyncHandler(async (req, res) => {
+  const user = await Employee.findById(req.params.id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+    user.password = req.body.password;
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(StaticRange.NOT_FOUND);
+    throw new Error('User not found');
+  }
+});
+
+const getEmployeeById = asyncHandler(async (req, res) => {
+  const user = await Employee.findById(req.params.id);
+  if (user) {
+    res.json(user);
+  } else {
+    res.statusCode.NOT_FOUND;
+    throw new Error('User not found');
+  }
+});
+export {
+  getAllEmployees,
+  deleteEmployee,
+  createEmployee,
+  updateEmployee,
+  getEmployeeById,
+};

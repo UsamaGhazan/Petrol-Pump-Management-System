@@ -30,9 +30,12 @@ import { logout } from '../../Features/loginSlice';
 import NavItem from './NavItem';
 import { useNavigate, useLocation, useNavigation } from 'react-router-dom';
 import {
+  FaCartPlus,
   FaDollarSign,
   FaGasPump,
   FaHome,
+  FaOilCan,
+  FaPlusCircle,
   FaShoppingCart,
   FaUserPlus,
   FaUsers,
@@ -41,12 +44,52 @@ import Breadcrumb from './BreadCrumb';
 import { useDispatch, useSelector } from 'react-redux';
 
 const LinkItems = [
-  { name: 'Dashboard', icon: FaHome, to: '/' },
-  { name: 'Products', icon: FaShoppingCart, to: '/products' },
-  { name: 'Employees List', icon: FaUsers, to: '/employees' },
-  { name: 'Add New Employee', icon: FaUserPlus, to: '/addEmployee' },
-  { name: 'Petroleum Products', icon: FaGasPump, to: '/petroleumProducts' },
-  { name: 'Set Product Prices', icon: FaDollarSign, to: '/setPrices' },
+  { name: 'Dashboard', icon: FaHome, to: '/', onlyAdmin: true },
+  { name: 'Products', icon: FaShoppingCart, to: '/products', onlyAdmin: true },
+  { name: 'Employees List', icon: FaUsers, to: '/employees', onlyAdmin: true },
+  {
+    name: 'Add New Employee',
+    icon: FaUserPlus,
+    to: '/addEmployee',
+    onlyAdmin: true,
+  },
+  {
+    name: 'Petroleum Products',
+    icon: FaGasPump,
+    to: '/petroleumProducts',
+    onlyAdmin: true,
+  },
+  {
+    name: 'Set Product Prices',
+    icon: FaDollarSign,
+    to: '/setPrices',
+    onlyAdmin: true,
+  },
+
+  {
+    name: 'Sell Product',
+    icon: FaCartPlus,
+    to: '/sellProduct',
+    onlyEmployee: true,
+  },
+  {
+    name: 'Sell Petroleum Product',
+    icon: FaGasPump,
+    to: '/sellPetroleumProduct',
+    onlyEmployee: true,
+  },
+  {
+    name: 'Add Stock',
+    icon: FaPlusCircle,
+    to: '/addStock',
+    onlyEmployee: true,
+  },
+  {
+    name: 'Add Petroleum Stock',
+    icon: FaOilCan,
+    to: '/addPetroleumstock',
+    onlyEmployee: true,
+  },
 ];
 const accountItems = [{ name: 'Profile', icon: FiUser, to: '/profile' }];
 
@@ -125,20 +168,39 @@ const SidebarContent = () => {
             </Box>
           </Flex>
           <Box mt={5}>
-            {LinkItems.map(link => (
-              <NavItem
-                key={link.name}
-                icon={link.icon}
-                to={link.to}
-                onClick={() => {
-                  setPageName(link.name);
-                  setActiveLink(link.to);
-                  navigate(link.to);
-                }}
-              >
-                {link.name}
-              </NavItem>
-            ))}
+            {employeeInfo.isAdmin
+              ? LinkItems.filter(item => item.both || item.onlyAdmin).map(
+                  link => (
+                    <NavItem
+                      key={link.name}
+                      icon={link.icon}
+                      to={link.to}
+                      onClick={() => {
+                        setPageName(link.name);
+                        setActiveLink(link.to);
+                        navigate(link.to);
+                      }}
+                    >
+                      {link.name}
+                    </NavItem>
+                  )
+                )
+              : LinkItems.filter(item => item.both || item.onlyEmployee).map(
+                  link => (
+                    <NavItem
+                      key={link.name}
+                      icon={link.icon}
+                      to={link.to}
+                      onClick={() => {
+                        setPageName(link.name);
+                        setActiveLink(link.to);
+                        navigate(link.to);
+                      }}
+                    >
+                      {link.name}
+                    </NavItem>
+                  )
+                )}
             <Divider my={2} borderColor="gray.400" />
             {accountItems.map(link => (
               <NavItem

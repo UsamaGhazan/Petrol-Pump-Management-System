@@ -31,7 +31,7 @@ import {
   AlertDescription,
   AlertIcon,
 } from '@chakra-ui/react';
-import { Link, Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
 import SearchBar from '../Components/SearchBar';
@@ -52,6 +52,7 @@ const EmployeesListScreen = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [deleteId, setDeleteId] = useState(null);
   const [successAlert, setSuccessAlert] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { error, loading, employees } = useSelector(
     store => store.employeesList
@@ -76,7 +77,9 @@ const EmployeesListScreen = () => {
     setDeleteId(id);
   };
 
-  const handleEmployeeDetails = id => {};
+  const handleEmployeeDetails = id => {
+    navigate(`/employeeDetails/${id}`);
+  };
 
   return (
     <Box>
