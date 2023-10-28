@@ -12,6 +12,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: employee.name,
       email: employee.email,
       isAdmin: employee.isAdmin,
+      password: employee.password,
       token: generateToken(employee._id),
     });
   } else {

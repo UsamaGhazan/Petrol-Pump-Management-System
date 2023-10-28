@@ -31,7 +31,7 @@ import {
   AlertDescription,
   AlertIcon,
 } from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link, Link as RouterLink } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
 import SearchBar from '../Components/SearchBar';
@@ -76,24 +76,10 @@ const EmployeesListScreen = () => {
     setDeleteId(id);
   };
 
+  const handleEmployeeDetails = id => {};
+
   return (
     <Box>
-      {/* <div className="alert-overlay">
-        {(successAlert) && (
-          <Alert
-            ml="388px"
-            status="info"
-            className={
-              success || createProductSuccess ? 'fade-in-slide-down' : ''
-            }
-          >
-            <AlertIcon />
-            <AlertDescription>
-              {success ? 'Product Updated' : 'New Product Added'}
-            </AlertDescription>
-          </Alert>
-        )}
-      </div> */}
       <SearchBar />
 
       <Box
@@ -149,7 +135,12 @@ const EmployeesListScreen = () => {
                 </Tr>
               ) : (
                 employees.map((item, index) => (
-                  <Tr key={index} height={'80px'}>
+                  <Tr
+                    key={index}
+                    height={'80px'}
+                    cursor={'pointer'}
+                    onClick={() => handleEmployeeDetails(item._id)}
+                  >
                     <Td>
                       <VStack alignItems={'flex-start'}>
                         <Box fontWeight={'700'}>{item.name}</Box>
