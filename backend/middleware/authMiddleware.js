@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'; //Step 3: Validate the token
 import AsyncHandler from 'express-async-handler';
-import Employee from '../Models/employeeModel';
-import { StatusCodes } from 'http-status-codes';
+import Employee from '../Models/employeeModel.js';
 //Is user logged in?
 const protect = AsyncHandler(async (req, res, next) => {
   let token;

@@ -161,7 +161,7 @@ const SidebarContent = () => {
               src={require('../../assets/images/SidebarHelpImage.png')}
               alt="logo"
               width="100px"
-              mt={'180px'}
+              mt={'100px'}
               ml={'75px'}
             />
           </Box>

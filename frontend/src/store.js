@@ -7,7 +7,7 @@ import productCreateSlice from './Features/productCreateSlice';
 import employeeDeleteSlice from './Features/employeeDeleteSlice';
 import employeeListSlice from './Features/employeeListSlice';
 import employeeCreateSlice from './Features/employeeCreateSlice';
-
+import updateProfileSlice from './Features/updateProfileSlice';
 const employeeInfoFromStorage = localStorage.getItem('employeeInfo')
   ? JSON.parse(localStorage.getItem('employeeInfo'))
   : null;
@@ -26,6 +26,7 @@ export const store = configureStore({
     employeesList: employeeListSlice,
     employeeDelete: employeeDeleteSlice,
     employeeCreate: employeeCreateSlice,
+    updateProfile: updateProfileSlice,
   },
   preloadedState: initialState,
 });

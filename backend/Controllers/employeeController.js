@@ -11,7 +11,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: employee._id,
       name: employee.name,
       email: employee.email,
-
+      isAdmin: employee.isAdmin,
       token: generateToken(employee._id),
     });
   } else {
@@ -20,4 +20,27 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { authUser };
+const updateEmployeeProfile = asyncHandler(async (req, res) => {
+  const user = await Employee.findById(req.user._id);
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(StaticRange.NOT_FOUND);
+    throw new Error('User not found');
+  }
+});
+
+export { authUser, updateEmployeeProfile };

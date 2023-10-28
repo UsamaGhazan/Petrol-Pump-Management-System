@@ -1,23 +1,40 @@
-import React, { useState } from 'react';
-import { Box, Button, Text, Input } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Button,
+  Input,
+  FormControl,
+  FormLabel,
+  Heading,
+  Center,
+} from '@chakra-ui/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-const ProfilePage = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [employeeDetails, setEmployeeDetails] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    password: '********', // For security, password is not shown by default
-    role: 'Employee',
-    employmentDate: '2022-01-01',
-  });
+import { updateUserProfile } from '../Features/updateProfileSlice';
+const ProfileScreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState(null);
 
-  const handleEditClick = () => {
-    setIsEditing(!isEditing);
-  };
+  const navigate = useNavigate();
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    setEmployeeDetails({ ...employeeDetails, [name]: value });
+  const dispatch = useDispatch();
+  const { loading, error, employeeInfo } = useSelector(
+    store => store.employeeLogin
+  );
+
+  const submitHandler = e => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match');
+    } else {
+      dispatch(
+        updateUserProfile({ id: employeeInfo._id, name, email, password })
+      );
+    }
   };
 
   return (
@@ -30,58 +47,67 @@ const ProfilePage = () => {
       ml={'305px'}
       bg={'white'}
       borderRadius={'20px'}
-      p={8}
     >
-      <Text fontSize="xl" fontWeight="bold" mb={4}>
-        Employee Profile
-      </Text>
-      <Text>Name:</Text>
-      <Input
-        value={employeeDetails.name}
-        name="name"
-        onChange={handleInputChange}
-        isReadOnly={!isEditing}
-        mb={4}
-      />
-      <Text>Email:</Text>
-      <Input
-        value={employeeDetails.email}
-        name="email"
-        onChange={handleInputChange}
-        isReadOnly={!isEditing}
-        mb={4}
-      />
-      <Text>Password:</Text>
-      <Input
-        value={employeeDetails.password}
-        name="password"
-        type="password"
-        onChange={handleInputChange}
-        isReadOnly={!isEditing}
-        mb={4}
-      />
-      <Text>Role:</Text>
-      <Input
-        value={employeeDetails.role}
-        name="role"
-        onChange={handleInputChange}
-        isReadOnly={!isEditing}
-        mb={4}
-      />
-      <Text>Employment Date:</Text>
-      <Input
-        value={employeeDetails.employmentDate}
-        name="employmentDate"
-        onChange={handleInputChange}
-        isReadOnly={!isEditing}
-        mb={4}
-      />
+      <Box p={4}>
+        {employeeInfo.isAdmin ? (
+          <Heading as="h2" mb={4}>
+            Admin Profile
+          </Heading>
+        ) : (
+          <Heading as="h2" mb={4}>
+            Employee Profile
+          </Heading>
+        )}
 
-      <Button onClick={handleEditClick} mt={4}>
-        {isEditing ? 'Save' : 'Edit'}
-      </Button>
+        <form onSubmit={submitHandler}>
+          <FormControl id="name" mb={4}>
+            <FormLabel>Name</FormLabel>
+            <Input
+              type="name"
+              placeholder="Enter Name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl id="email" mb={4}>
+            <FormLabel>Email Address</FormLabel>
+            <Input
+              type="email"
+              placeholder="Enter Email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl id="password" mb={4}>
+            <FormLabel>Password</FormLabel>
+            <Input
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </FormControl>
+
+          <FormControl id="confirmPassword" mb={4}>
+            <FormLabel>Confirm Password</FormLabel>
+            <Input
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+            />
+          </FormControl>
+          <Center>
+            <Button type="submit" colorScheme="blue">
+              Update
+            </Button>
+          </Center>
+        </form>
+      </Box>
     </Box>
   );
 };
 
-export default ProfilePage;
+export default ProfileScreen;
