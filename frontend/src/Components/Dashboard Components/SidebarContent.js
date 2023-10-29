@@ -31,6 +31,7 @@ import NavItem from './NavItem';
 import { useNavigate, useLocation, useNavigation } from 'react-router-dom';
 import {
   FaCartPlus,
+  FaCheckCircle,
   FaDollarSign,
   FaGasPump,
   FaHome,
@@ -63,6 +64,12 @@ const LinkItems = [
     name: 'Set Product Prices',
     icon: FaDollarSign,
     to: '/setPrices',
+    onlyAdmin: true,
+  },
+  {
+    name: 'Sold Products',
+    icon: FaCheckCircle,
+    to: '/soldProducts',
     onlyAdmin: true,
   },
 

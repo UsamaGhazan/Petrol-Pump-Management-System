@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const initialState = {};
 export const sellProducts = createAsyncThunk(
-  'sellProductr',
+  'sellProduct',
   async (products, thunkAPI) => {
     console.log(products);
     try {
@@ -40,7 +40,7 @@ const sellProductSlice = createSlice({
   initialState,
   reducers: {
     PRODUCT_SELL_RESET: () => {
-      return {};
+      return { success: false };
     },
   },
   extraReducers: {

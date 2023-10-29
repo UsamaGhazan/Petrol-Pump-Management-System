@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const soldProductSchema = new mongoose.Schema(
   {
     productsName: [{ type: String, required: true }],
@@ -11,6 +12,7 @@ const soldProductSchema = new mongoose.Schema(
         required: true,
       },
     ],
+    quantities: [{ type: Number, required: true }],
   },
   {
     timestamps: true,

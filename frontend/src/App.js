@@ -29,6 +29,7 @@ import ProfileUpdateScreen from './Screens/ProfileUpdateScreen';
 import EmployeeDetailsScreen from './Screens/EmployeeDetailsScreen';
 import SellProductScreen from './Screens/EmployeeScreens/SellProductScreen';
 import ConfirmSaleScreen from './Screens/EmployeeScreens/ConfirmSaleScreen';
+import SoldProductsScreen from './Screens/SoldProductsScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -44,6 +45,7 @@ function App() {
           <Route path="/profile" element={<ProfileUpdateScreen />} />
           <Route path="/sellProduct" element={<SellProductScreen />} />
           <Route path="/confirmation" element={<ConfirmSaleScreen />} />
+          <Route path="/soldProducts" element={<SoldProductsScreen />} />
 
           <Route
             path="/petroleumProducts"

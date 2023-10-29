@@ -65,7 +65,15 @@ const SellProductScreen = () => {
     });
   };
   const handleProceed = () => {
-    navigate('/confirmation', { state: productQuantities });
+    const allQuantitiesZero = productQuantities.every(
+      product => product.quantity === 0
+    );
+
+    if (allQuantitiesZero) {
+      alert('Please increase the quantity to proceed.');
+    } else {
+      navigate('/confirmation', { state: productQuantities });
+    }
   };
 
   return (

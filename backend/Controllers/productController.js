@@ -58,21 +58,22 @@ const sellProducts = async (req, res) => {
   const employee = req.user;
 
   try {
-    // Update SoldProduct
     const soldProductsData = {
       productsName: productQuantities.map((product) => product.name),
       employeeName: employee.name,
       employeeEmail: employee.email,
       employeeId: employee._id,
       productID: productQuantities.map((product) => product.productId),
+      quantities: productQuantities.map((product) => product.quantity),
     };
+
     const soldProduct = await SoldProducts.create(soldProductsData);
 
-    // Update Products
     for (const product of productQuantities) {
       const { productId, quantity } = product;
 
       const foundProduct = await Product.findById(productId);
+
       if (foundProduct) {
         const updatedTotalStock = foundProduct.totalStock - quantity;
         const updatedSale = foundProduct.sale + quantity;
@@ -82,7 +83,8 @@ const sellProducts = async (req, res) => {
           sale: updatedSale,
         });
       } else {
-        console.log('error');
+        console.log('Product not found');
+        // Handle the scenario where the product is not found
       }
     }
 
@@ -92,10 +94,16 @@ const sellProducts = async (req, res) => {
   }
 };
 
+const getAllSoldProducts = asyncHandler(async (req, res) => {
+  const soldProducts = await SoldProducts.find({});
+  res.json(soldProducts);
+});
+
 export {
   getAllProducts,
   updateProduct,
   deleteProduct,
   createProduct,
   sellProducts,
+  getAllSoldProducts,
 };
