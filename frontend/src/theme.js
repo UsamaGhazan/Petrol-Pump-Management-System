@@ -17,6 +17,8 @@ const theme = extendTheme({
   fonts: {
     lato: `'Lato', sans-serif`,
     robo: `'Roboto', sans-serif`,
+    tas: `'Edu TAS Beginner Variable', sans-serif`,
+    bitter: `'Bitter Variable', sans-serif`,
   },
 });
 

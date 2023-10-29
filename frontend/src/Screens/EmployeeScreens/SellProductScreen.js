@@ -1,18 +1,11 @@
+import React, { useState, useEffect } from 'react';
 import {
-  Avatar,
-  AvatarBadge,
   Box,
   Button,
   Center,
-  Divider,
-  Flex,
   HStack,
   Heading,
-  Icon,
   Input,
-  Menu,
-  MenuButton,
-  Spinner,
   Table,
   Tbody,
   Td,
@@ -20,10 +13,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { FaCheck, FaEdit, FaPlus, FaTimes, FaTrash } from 'react-icons/fa'; // Import the FaEdit icon
-import { getProductList } from '../../Features/productsListSlice';
-import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 export const products = [
   {
     id: 1,
@@ -118,35 +109,39 @@ export const products = [
 ];
 
 const SellProductScreen = () => {
-  const dispatch = useDispatch();
-  //   const { error, loading, products } = useSelector(store => store.productList);
-  const loading = false;
-
-  const [productQuantity, setProductQuantity] = useState([]);
-  const increaseQuantity = index => {
-    const updatedQuantity = [...productQuantity];
-    updatedQuantity[index] = (updatedQuantity[index] || 0) + 1;
-    setProductQuantity(updatedQuantity);
-  };
-
-  const decreaseQuantity = index => {
-    if (productQuantity[index] > 0) {
-      const updatedQuantity = [...productQuantity];
-      updatedQuantity[index] = updatedQuantity[index] - 1;
-      setProductQuantity(updatedQuantity);
-    }
-  };
-
-  const handleQuantityChange = (e, index) => {
-    const updatedQuantity = [...productQuantity];
-    const newQuantity = parseInt(e.target.value);
-    updatedQuantity[index] = newQuantity >= 0 ? newQuantity : 0;
-    setProductQuantity(updatedQuantity);
-  };
-
+  const navigate = useNavigate();
+  const [productQuantities, setProductQuantities] = useState(
+    products.map(product => ({
+      name: product.name,
+      quantity: 0,
+      price: product.price,
+    }))
+  );
+  console.log(productQuantities);
   useEffect(() => {
-    dispatch(getProductList());
-  }, [dispatch]);
+    setProductQuantities(
+      products.map(product => ({
+        name: product.name,
+        quantity: 0,
+        price: product.price,
+      }))
+    );
+  }, []);
+
+  const handleQuantityChange = (index, newQuantity) => {
+    setProductQuantities(prevQuantities => {
+      const updatedQuantities = [...prevQuantities];
+      updatedQuantities[index] = {
+        ...updatedQuantities[index],
+        quantity: newQuantity,
+      };
+      return updatedQuantities;
+    });
+  };
+  const handleProceed = () => {
+    navigate('/confirmation', { state: productQuantities });
+  };
+
   return (
     <Box
       pos={'absolute'}
@@ -175,57 +170,48 @@ const SellProductScreen = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {loading ? (
-              <Tr height="80px">
-                <Td colSpan={8}>
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    height="100%"
-                  >
-                    <Spinner color="white" />
-                  </Flex>
+            {productQuantities.map((item, index) => (
+              <Tr key={index} height={'80px'}>
+                <Td>
+                  <Box fontWeight={'bold'}>{item.name}</Box>
+                </Td>
+                <Td>
+                  <HStack justifyContent="center">
+                    <Button
+                      bg={'#D3D3D3'}
+                      onClick={() =>
+                        handleQuantityChange(
+                          index,
+                          Math.max(item.quantity - 1, 0)
+                        )
+                      }
+                    >
+                      -
+                    </Button>
+                    <Input
+                      type="number"
+                      value={item.quantity}
+                      onChange={e =>
+                        handleQuantityChange(
+                          index,
+                          parseInt(e.target.value) || 0
+                        )
+                      }
+                      w="60px"
+                      textAlign="center"
+                    />
+                    <Button
+                      bg={'#D3D3D3'}
+                      onClick={() =>
+                        handleQuantityChange(index, item.quantity + 1)
+                      }
+                    >
+                      +
+                    </Button>
+                  </HStack>
                 </Td>
               </Tr>
-            ) : (
-              products
-                .filter(
-                  item =>
-                    item.name !== 'Petrol' &&
-                    item.name !== 'High Octane' &&
-                    item.name !== 'Diesel'
-                )
-                .map((item, index) => (
-                  <Tr key={index} height={'80px'}>
-                    <Td>
-                      <Box fontWeight={'bold'}>{item.name}</Box>
-                    </Td>
-                    <Td>
-                      <HStack justifyContent="center">
-                        <Button
-                          onClick={() => decreaseQuantity(index)}
-                          bg={'#D3D3D3'}
-                        >
-                          -
-                        </Button>
-                        <Input
-                          value={productQuantity[index] || 0}
-                          onChange={e => handleQuantityChange(e, index)}
-                          type="number"
-                          w="60px"
-                          textAlign="center"
-                        />
-                        <Button
-                          onClick={() => increaseQuantity(index)}
-                          bg={'#D3D3D3'}
-                        >
-                          +
-                        </Button>
-                      </HStack>
-                    </Td>{' '}
-                  </Tr>
-                ))
-            )}
+            ))}
           </Tbody>
         </Table>
         <Center>
@@ -234,6 +220,8 @@ const SellProductScreen = () => {
             color={'white'}
             mt={'10px'}
             size={'lg'}
+            _hover={'#4E67CC'}
+            _active={'#4E67CC'}
             onClick={handleProceed}
           >
             Proceed
