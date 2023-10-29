@@ -14,119 +14,45 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-export const products = [
-  {
-    id: 1,
-    name: 'Product 1',
-    previousStock: 10,
-    newStock: 500,
-    sale: 400,
-    remainingBalance: 600,
-    price: 100,
-  },
-  {
-    id: 2,
-    name: 'Product 2',
-    previousStock: 15,
-    newStock: 700,
-    sale: 500,
-    remainingBalance: 700,
-    price: 200,
-  },
-  {
-    id: 3,
-    name: 'Product 3',
-    previousStock: 20,
-    newStock: 800,
-    sale: 600,
-    remainingBalance: 900,
-    price: 150,
-  },
-  {
-    id: 4,
-    name: 'Product 4',
-    previousStock: 8,
-    newStock: 600,
-    sale: 350,
-    remainingBalance: 650,
-    price: 300,
-  },
-  {
-    id: 5,
-    name: 'Product 5',
-    previousStock: 12,
-    newStock: 900,
-    sale: 700,
-    remainingBalance: 1100,
-    price: 250,
-  },
-  {
-    id: 6,
-    name: 'Product 6',
-    previousStock: 18,
-    newStock: 750,
-    sale: 550,
-    remainingBalance: 1200,
-    price: 180,
-  },
-  {
-    id: 7,
-    name: 'Product 7',
-    previousStock: 7,
-    newStock: 400,
-    sale: 320,
-    remainingBalance: 480,
-    price: 210,
-  },
-  {
-    id: 8,
-    name: 'Product 8',
-    previousStock: 14,
-    newStock: 950,
-    sale: 800,
-    remainingBalance: 1100,
-    price: 280,
-  },
-  {
-    id: 9,
-    name: 'Product 9',
-    previousStock: 22,
-    newStock: 850,
-    sale: 700,
-    remainingBalance: 1270,
-    price: 170,
-  },
-  {
-    id: 10,
-    name: 'Product 10',
-    previousStock: 6,
-    newStock: 300,
-    sale: 250,
-    remainingBalance: 350,
-    price: 350,
-  },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductList } from '../../Features/productsListSlice';
 
 const SellProductScreen = () => {
+  const { error, loading, products } = useSelector(store => store.productList);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [productQuantities, setProductQuantities] = useState(
-    products.map(product => ({
-      name: product.name,
-      quantity: 0,
-      price: product.price,
-    }))
-  );
-  console.log(productQuantities);
-  useEffect(() => {
-    setProductQuantities(
+    products &&
       products.map(product => ({
+        productId: product._id,
         name: product.name,
         quantity: 0,
         price: product.price,
       }))
-    );
-  }, []);
+  );
+
+  useEffect(() => {
+    dispatch(getProductList());
+  }, [dispatch]);
+  useEffect(() => {
+    if (products) {
+      setProductQuantities(
+        products
+          .filter(
+            item =>
+              item.name !== 'Petrol' &&
+              item.name !== 'High Octane' &&
+              item.name !== 'Diesel'
+          )
+          .map(product => ({
+            productId: product._id,
+            name: product.name,
+            quantity: 0,
+            price: product.price,
+          }))
+      );
+    }
+  }, [products]);
 
   const handleQuantityChange = (index, newQuantity) => {
     setProductQuantities(prevQuantities => {

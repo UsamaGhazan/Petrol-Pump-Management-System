@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../Models/productsModel.js';
+import SoldProducts from '../Models/soldProductsModel.js';
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
@@ -52,4 +53,49 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(createdProduct);
 });
 
-export { getAllProducts, updateProduct, deleteProduct, createProduct };
+const sellProducts = async (req, res) => {
+  const productQuantities = req.body;
+  const employee = req.user;
+
+  try {
+    // Update SoldProduct
+    const soldProductsData = {
+      productsName: productQuantities.map((product) => product.name),
+      employeeName: employee.name,
+      employeeEmail: employee.email,
+      employeeId: employee._id,
+      productID: productQuantities.map((product) => product.productId),
+    };
+    const soldProduct = await SoldProducts.create(soldProductsData);
+
+    // Update Products
+    for (const product of productQuantities) {
+      const { productId, quantity } = product;
+
+      const foundProduct = await Product.findById(productId);
+      if (foundProduct) {
+        const updatedTotalStock = foundProduct.totalStock - quantity;
+        const updatedSale = foundProduct.sale + quantity;
+
+        await Product.findByIdAndUpdate(productId, {
+          totalStock: updatedTotalStock,
+          sale: updatedSale,
+        });
+      } else {
+        console.log('error');
+      }
+    }
+
+    res.status(200).json({ soldProduct });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to sell products' });
+  }
+};
+
+export {
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+  createProduct,
+  sellProducts,
+};

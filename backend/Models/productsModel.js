@@ -8,11 +8,18 @@ const productSchema = mongoose.Schema(
     sale: { type: Number, required: true },
     remainingBalance: { type: Number, required: true },
     price: { type: Number, required: true },
+    totalStock: { type: Number },
   },
   {
     timestamps: true,
   }
 );
+
+// Pre-save hook to calculate totalStock before saving
+productSchema.pre('save', function (next) {
+  this.totalStock = this.previousStock + this.newStock;
+  next();
+});
 
 const Product = mongoose.model('Product', productSchema);
 

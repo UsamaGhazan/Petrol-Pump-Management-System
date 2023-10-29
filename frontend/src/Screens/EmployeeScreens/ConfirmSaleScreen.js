@@ -9,12 +9,19 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { sellProducts } from '../../Features/productSellSlice';
 const ConfirmSaleScreen = () => {
   const location = useLocation();
-  const productQuantities = location.state;
-  const handleSell = () => {};
+  const dispatch = useDispatch();
+  const productQuantities = location.state.filter(
+    product => product.quantity > 0
+  );
+  console.log(productQuantities);
+  const handleSell = () => {
+    dispatch(sellProducts(productQuantities));
+  };
   return (
     <Box
       pos={'absolute'}
@@ -47,24 +54,22 @@ const ConfirmSaleScreen = () => {
           </Center>
           <Box border={'2px solid gray'} width={'650px'} borderRadius={'10px'}>
             <VStack align={'start'} padding={4}>
-              {productQuantities
-                .filter(product => product.quantity > 0)
-                .map(product => (
-                  <Box
-                    display="grid"
-                    gridTemplateColumns="minmax(200px, 1fr) auto"
-                    columnGap={300}
-                    key={product.name}
-                  >
-                    <Box fontWeight="bold">{product.name}</Box>
-                    <Box textAlign="right" fontWeight="bold">
-                      Rs. {product.price * product.quantity}
-                    </Box>
-                    <Box fontSize={14} color="gray">
-                      Qty. {product.quantity}
-                    </Box>
+              {productQuantities.map(product => (
+                <Box
+                  display="grid"
+                  gridTemplateColumns="minmax(200px, 1fr) auto"
+                  columnGap={300}
+                  key={product.name}
+                >
+                  <Box fontWeight="bold">{product.name}</Box>
+                  <Box textAlign="right" fontWeight="bold">
+                    Rs. {product.price * product.quantity}
                   </Box>
-                ))}
+                  <Box fontSize={14} color="gray">
+                    Qty. {product.quantity}
+                  </Box>
+                </Box>
+              ))}
               <Divider borderColor="gray.400" />
               <HStack spacing={'400px'}>
                 <Box fontWeight={'600'}>Total Amount</Box>
