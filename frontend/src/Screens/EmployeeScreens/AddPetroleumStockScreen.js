@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductList } from '../../Features/productsListSlice';
 
-const AddStockScreen = () => {
+const AddPetroleumStockScreen = () => {
   const dispatch = useDispatch();
   const { loading, products } = useSelector(store => store.productList);
   const navigate = useNavigate();
@@ -35,9 +35,9 @@ const AddStockScreen = () => {
         products
           .filter(
             p =>
-              p.name !== 'Petrol' &&
-              p.name !== 'High Octane' &&
-              p.name !== 'Diesel'
+              p.name === 'Petrol' ||
+              p.name === 'High Octane' ||
+              p.name === 'Diesel'
           )
           .map(product => ({
             productId: product._id,
@@ -149,4 +149,4 @@ const AddStockScreen = () => {
   );
 };
 
-export default AddStockScreen;
+export default AddPetroleumStockScreen;

@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../Models/productsModel.js';
 import SoldProducts from '../Models/soldProductsModel.js';
+import NewStock from '../Models/newStockModel.js';
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
@@ -98,6 +99,10 @@ const getAllSoldProducts = asyncHandler(async (req, res) => {
   const soldProducts = await SoldProducts.find({});
   res.json(soldProducts);
 });
+const getNewStock = asyncHandler(async (req, res) => {
+  const newStock = await NewStock.find({});
+  res.json(newStock);
+});
 
 export {
   getAllProducts,
@@ -106,4 +111,5 @@ export {
   createProduct,
   sellProducts,
   getAllSoldProducts,
+  getNewStock,
 };

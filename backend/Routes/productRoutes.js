@@ -7,9 +7,11 @@ import {
   createProduct,
   sellProducts,
   getAllSoldProducts,
+  getNewStock,
 } from '../Controllers/productController.js';
 import { protect } from '../middleware/authMiddleware.js';
 router.get('/', getAllProducts);
+router.get('/newStock', getNewStock);
 router.get('/soldProducts', getAllSoldProducts);
 router.post('/', createProduct);
 router.put('/:id', updateProduct);

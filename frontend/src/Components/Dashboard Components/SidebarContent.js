@@ -24,6 +24,7 @@ import {
   FiUser,
   FiLogIn,
   FiLogOut,
+  FiPlus,
 } from 'react-icons/fi';
 import { AiOutlineUser } from 'react-icons/ai';
 import { logout } from '../../Features/loginSlice';
@@ -70,6 +71,12 @@ const LinkItems = [
     name: 'Sold Products',
     icon: FaCheckCircle,
     to: '/soldProducts',
+    onlyAdmin: true,
+  },
+  {
+    name: 'New Stock',
+    icon: FiPlus,
+    to: '/newStockAdded',
     onlyAdmin: true,
   },
 

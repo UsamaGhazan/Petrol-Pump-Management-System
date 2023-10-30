@@ -69,7 +69,8 @@ const addNewStock = async (req, res) => {
       const foundProduct = await Product.findById(productId);
 
       if (foundProduct) {
-        const previousStock = foundProduct.totalStock - foundProduct.newStock;
+        const previousStock =
+          foundProduct.previousStock + foundProduct.newStock;
         const updatedTotalStock = foundProduct.totalStock + newStock;
 
         await Product.findByIdAndUpdate(productId, {

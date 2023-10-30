@@ -15,16 +15,16 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { sellProducts } from '../../Features/productSellSlice';
-import { PRODUCT_SELL_RESET } from '../../Features/productSellSlice';
+import { ADD_NEW_STOCK_RESET } from '../../Features/addNewStockSlice';
 import { addNewStock } from '../../Features/addNewStockSlice';
 const AddStockConfirmationScreen = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log(location.state);
   const productQuantities = location.state.filter(
     product => product.newStock > 0
   );
+  console.log(productQuantities);
   const { error, loading, success } = useSelector(store => store.newStockAdded);
   const [successAlert, setSuccessAlert] = useState(false);
 
@@ -36,7 +36,7 @@ const AddStockConfirmationScreen = () => {
     if (success) {
       const timer = setTimeout(() => {
         setSuccessAlert(false);
-        dispatch(PRODUCT_SELL_RESET());
+        dispatch(ADD_NEW_STOCK_RESET());
         navigate('/addStock');
       }, 3000);
 

@@ -22,13 +22,7 @@ export const getProductsSoldList = createAsyncThunk(
 export const productsSoldListSlice = createSlice({
   name: 'SoldProductList',
   initialState,
-  reducers: {
-    PRODUCT_SOLD_RESET: (state, action) => {
-      state.products = state.products.filter(
-        product => product._id !== action.payload
-      );
-    },
-  },
+
   extraReducers: {
     [getProductsSoldList.pending]: state => {
       return {

@@ -8,7 +8,6 @@ export const addNewStock = createAsyncThunk(
     console.log(newStock);
     try {
       const {
-        //userLogin .getState() sy nikalo aur userInfo variable usy day do
         employeeLogin: { employeeInfo },
       } = thunkAPI.getState();
 
