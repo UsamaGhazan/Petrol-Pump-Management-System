@@ -35,6 +35,7 @@ import AddStockScreen from './Screens/EmployeeScreens/AddStockScreen';
 import AddStockConfirmationScreen from './Screens/EmployeeScreens/AddStockConfirmationScreen';
 import AddPetroleumStockScreen from './Screens/EmployeeScreens/AddPetroleumStockScreen';
 import NewStockScreen from './Screens/NewStockScreen';
+import AddExpenseScreen from './Screens/AddExpenseScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -57,6 +58,7 @@ function App() {
           <Route path="/soldProducts" element={<SoldProductsScreen />} />
           <Route path="/addStock" element={<AddStockScreen />} />
           <Route path="/newStockAdded" element={<NewStockScreen />} />
+          <Route path="/addExpense" element={<AddExpenseScreen />} />
           <Route
             path="/addPetroleumStock"
             element={<AddPetroleumStockScreen />}

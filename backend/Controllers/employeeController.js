@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Product from '../Models/productsModel.js';
 import Employee from '../Models/employeeModel.js';
 import NewStock from '../Models/newStockModel.js';
+import Expense from '../Models/expenseModel.js';
 import generateToken from '../utils/generateToken.js';
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -50,7 +51,6 @@ const addNewStock = async (req, res) => {
   const employee = req.user;
 
   try {
-    console.log('before ');
     const newStockData = {
       productsName: products.map((product) => product.name),
       employeeName: employee.name,
@@ -59,7 +59,6 @@ const addNewStock = async (req, res) => {
       productID: products.map((product) => product.productId),
       newStock: products.map((product) => product.newStock),
     };
-    console.log('after');
     const newStock = await NewStock.create(newStockData);
 
     // Update Product model with new stock information
@@ -89,4 +88,27 @@ const addNewStock = async (req, res) => {
   }
 };
 
-export { authUser, updateEmployeeProfile, addNewStock };
+const addExpense = asyncHandler(async (req, res) => {
+  const { expenseName, description, amount } = req.body;
+  const { _id: employeeId, name: employeeName } = req.user;
+
+  try {
+    const newExpense = new Expense({
+      expenseName,
+      description,
+      amount,
+      employeeName,
+      employeeId: employeeId.toString(), // Converting to String if 'employeeId' is an ObjectId
+    });
+
+    const createdExpense = await newExpense.save();
+
+    res.status(201).json(createdExpense);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: 'Expense creation failed', error: error.message });
+  }
+});
+
+export { authUser, updateEmployeeProfile, addNewStock, addExpense };

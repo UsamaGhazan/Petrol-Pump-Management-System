@@ -25,6 +25,7 @@ import {
   FiLogIn,
   FiLogOut,
   FiPlus,
+  FiPlusSquare,
 } from 'react-icons/fi';
 import { AiOutlineUser } from 'react-icons/ai';
 import { logout } from '../../Features/loginSlice';
@@ -36,6 +37,7 @@ import {
   FaDollarSign,
   FaGasPump,
   FaHome,
+  FaMoneyBill,
   FaOilCan,
   FaPlusCircle,
   FaShoppingCart,
@@ -79,6 +81,12 @@ const LinkItems = [
     to: '/newStockAdded',
     onlyAdmin: true,
   },
+  {
+    name: 'View Expenses',
+    icon: FaMoneyBill,
+    to: '/viewExpenses',
+    onlyAdmin: true,
+  },
 
   {
     name: 'Sell Product',
@@ -102,6 +110,12 @@ const LinkItems = [
     name: 'Add Petroleum Stock',
     icon: FaOilCan,
     to: '/addPetroleumstock',
+    onlyEmployee: true,
+  },
+  {
+    name: 'Add Expense',
+    icon: FiPlusSquare,
+    to: '/addExpense',
     onlyEmployee: true,
   },
 ];
