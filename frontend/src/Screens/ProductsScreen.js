@@ -226,9 +226,7 @@ const ProductsScreen = () => {
                 <Th color={'#A0AEC0'}>New Stock</Th>
                 <Th color={'#A0AEC0'}>Total</Th>
                 <Th color={'#A0AEC0'}>Sale</Th>
-                <Th color={'#A0AEC0'} width={'190px'}>
-                  Remaining Balance
-                </Th>
+
                 <Th color={'#A0AEC0'}>Price</Th>
                 <Th color={'#A0AEC0'}>Edit/Delete</Th>
               </Tr>
@@ -345,32 +343,7 @@ const ProductsScreen = () => {
                           </Box>
                         )}
                       </Td>
-                      <Td>
-                        {' '}
-                        {editMode && editId === item._id ? (
-                          <Input
-                            width={'81px'}
-                            type="number"
-                            size={'sm'}
-                            value={editedValues.remainingBalance}
-                            borderColor={'#dc916e'}
-                            focusBorderColor={'#dc916e'}
-                            onChange={e =>
-                              handleInputChange(
-                                'remainingBalance',
-                                e.target.value
-                              )
-                            }
-                          />
-                        ) : (
-                          <Box>
-                            Rs.{' '}
-                            {updatedProduct && updatedProduct._id === item._id
-                              ? updatedProduct.remainingBalance
-                              : item.remainingBalance}
-                          </Box>
-                        )}
-                      </Td>
+
                       <Td>
                         {' '}
                         {editMode && editId === item._id ? (
