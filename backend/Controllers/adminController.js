@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../Models/productsModel.js';
 import Employee from '../Models/employeeModel.js';
+import Expense from '../Models/expenseModel.js';
 import generateToken from '../utils/generateToken.js';
 
 const getAllEmployees = asyncHandler(async (req, res) => {
@@ -62,10 +63,16 @@ const getEmployeeById = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 });
+
+const getAllExpenses = asyncHandler(async (req, res) => {
+  const expenses = await Expense.find({});
+  res.json(expenses);
+});
 export {
   getAllEmployees,
   deleteEmployee,
   createEmployee,
   updateEmployee,
   getEmployeeById,
+  getAllExpenses,
 };

@@ -70,7 +70,7 @@ const NewStockScreen = () => {
                 </Tr>
               ) : newStock ? (
                 newStock.map((item, index) => (
-                  <Tr key={index} height={'80px'}>
+                  <Tr key={index} height={'80px'} isOpen={isModalOpen}>
                     <Td fontWeight={'bold'}>{item.employeeName}</Td>
                     <Td
                       fontWeight={'bold'}
@@ -92,7 +92,7 @@ const NewStockScreen = () => {
             </Tbody>
           </Table>
 
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <Modal onClose={() => setIsModalOpen(false)}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Detailed Products</ModalHeader>

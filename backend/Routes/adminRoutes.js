@@ -6,8 +6,10 @@ import {
   createEmployee,
   updateEmployee,
   getEmployeeById,
+  getAllExpenses,
 } from '../Controllers/adminController.js';
 router.get('/', getAllEmployees);
+router.get('/expenses', getAllExpenses);
 router.post('/', createEmployee);
 router.delete('/:id', deleteEmployee);
 router.put('/:id', updateEmployee);
