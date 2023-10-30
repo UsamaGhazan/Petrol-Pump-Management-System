@@ -56,7 +56,7 @@ const createProduct = asyncHandler(async (req, res) => {
 const sellProducts = async (req, res) => {
   const productQuantities = req.body;
   const employee = req.user;
-
+  console.log(productQuantities);
   try {
     const soldProductsData = {
       productsName: productQuantities.map((product) => product.name),

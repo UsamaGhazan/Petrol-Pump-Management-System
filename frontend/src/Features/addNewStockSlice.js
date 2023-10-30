@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {};
-export const sellProducts = createAsyncThunk(
-  'sellProduct',
-  async (products, thunkAPI) => {
-    console.log(products);
+export const addNewStock = createAsyncThunk(
+  'addNewStock',
+  async (newStock, thunkAPI) => {
+    console.log(newStock);
     try {
       const {
         //userLogin .getState() sy nikalo aur userInfo variable usy day do
@@ -19,8 +19,8 @@ export const sellProducts = createAsyncThunk(
         },
       };
       const { data } = await axios.post(
-        `/api/products/sellProducts`,
-        products,
+        `/api/employee/addNewStock`,
+        newStock,
         config
       );
       return data;
@@ -34,29 +34,29 @@ export const sellProducts = createAsyncThunk(
   }
 );
 
-const sellProductSlice = createSlice({
+const addNewStockSlice = createSlice({
   name: 'sellProduct',
   initialState,
   reducers: {
-    PRODUCT_SELL_RESET: () => {
+    ADD_NEW_STOCK_RESET: () => {
       return { success: false };
     },
   },
   extraReducers: {
-    [sellProducts.pending]: state => {
+    [addNewStock.pending]: state => {
       return {
         loading: true,
       };
     },
 
-    [sellProducts.fulfilled]: (state, action) => {
+    [addNewStock.fulfilled]: (state, action) => {
       return {
         loading: false,
         success: true,
       };
     },
 
-    [sellProducts.rejected]: (state, action) => {
+    [addNewStock.rejected]: (state, action) => {
       return {
         loading: false,
         error: action.payload,
@@ -64,5 +64,5 @@ const sellProductSlice = createSlice({
     },
   },
 });
-export const { PRODUCT_SELL_RESET } = sellProductSlice.actions;
-export default sellProductSlice.reducer;
+export const { ADD_NEW_STOCK_RESET } = addNewStockSlice.actions;
+export default addNewStockSlice.reducer;

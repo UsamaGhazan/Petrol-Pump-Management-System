@@ -30,6 +30,9 @@ import EmployeeDetailsScreen from './Screens/EmployeeDetailsScreen';
 import SellProductScreen from './Screens/EmployeeScreens/SellProductScreen';
 import ConfirmSaleScreen from './Screens/EmployeeScreens/ConfirmSaleScreen';
 import SoldProductsScreen from './Screens/SoldProductsScreen';
+import SellPetroleumProductsScreen from './Screens/EmployeeScreens/SellPetroleumProductScreen';
+import AddStockScreen from './Screens/EmployeeScreens/AddStockScreen';
+import AddStockConfirmationScreen from './Screens/EmployeeScreens/AddStockConfirmationScreen';
 function App() {
   return (
     <BrowserRouter>
@@ -44,8 +47,17 @@ function App() {
           <Route path="/setPrices" element={<SetPricesScreen />} />
           <Route path="/profile" element={<ProfileUpdateScreen />} />
           <Route path="/sellProduct" element={<SellProductScreen />} />
+          <Route
+            path="/sellPetroleumProduct"
+            element={<SellPetroleumProductsScreen />}
+          />
           <Route path="/confirmation" element={<ConfirmSaleScreen />} />
           <Route path="/soldProducts" element={<SoldProductsScreen />} />
+          <Route path="/addStock" element={<AddStockScreen />} />
+          <Route
+            path="/addStockConfirmation"
+            element={<AddStockConfirmationScreen />}
+          />
 
           <Route
             path="/petroleumProducts"

@@ -12,6 +12,7 @@ import updateEmployeeProfileSlice from './Features/updateEmployeeProfileSlice';
 import employeeDetailsSlice from './Features/employeeDetailsSlice';
 import productSellSlice from './Features/productSellSlice';
 import productsSoldSlice from './Features/productsSoldSlice';
+import addNewStockSlice from './Features/addNewStockSlice';
 const employeeInfoFromStorage = localStorage.getItem('employeeInfo')
   ? JSON.parse(localStorage.getItem('employeeInfo'))
   : null;
@@ -35,6 +36,7 @@ export const store = configureStore({
     employeeDetails: employeeDetailsSlice,
     sellProducts: productSellSlice,
     productsSold: productsSoldSlice,
+    newStockAdded: addNewStockSlice,
   },
   preloadedState: initialState,
 });
