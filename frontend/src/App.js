@@ -17,7 +17,6 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import HomeScreen from './Screens/HomeScreen';
 import SidebarContent from './Components/Dashboard Components/SidebarContent';
 import ProductsScreen from './Screens/ProductsScreen';
 import LoginScreen from './Screens/LoginScreen';
@@ -37,6 +36,7 @@ import AddPetroleumStockScreen from './Screens/EmployeeScreens/AddPetroleumStock
 import NewStockScreen from './Screens/NewStockScreen';
 import AddExpenseScreen from './Screens/AddExpenseScreen';
 import ViewExpensesScreen from './Screens/ViewExpensesScreen';
+import Dashboard from './Screens/Dashboard';
 function App() {
   return (
     <BrowserRouter>
@@ -44,7 +44,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<LoginScreen />} />
-          <Route path="/dashboard" element={<HomeScreen />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<ProductsScreen />} />
           <Route path="/employees" element={<EmployeesListScreen />} />
           <Route path="/addEmployee" element={<AddNewEmployeeScreen />} />

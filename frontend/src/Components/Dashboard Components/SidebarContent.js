@@ -48,7 +48,7 @@ import Breadcrumb from './BreadCrumb';
 import { useDispatch, useSelector } from 'react-redux';
 
 const LinkItems = [
-  { name: 'Dashboard', icon: FaHome, to: '/', onlyAdmin: true },
+  { name: 'Dashboard', icon: FaHome, to: '/dashboard', onlyAdmin: true },
   { name: 'Products', icon: FaShoppingCart, to: '/products', onlyAdmin: true },
   { name: 'Employees List', icon: FaUsers, to: '/employees', onlyAdmin: true },
   {
@@ -186,14 +186,7 @@ const SidebarContent = () => {
             mx="8"
             justifyContent="space-between"
           >
-            <Box>
-              <Image
-                src={require('../../assets/images/logo1.png')}
-                alt="logo"
-                width="150px"
-                mt={'20px'}
-              />
-            </Box>
+            <Box>Progressive Internationals</Box>
           </Flex>
           <Box mt={5}>
             {employeeInfo.isAdmin
